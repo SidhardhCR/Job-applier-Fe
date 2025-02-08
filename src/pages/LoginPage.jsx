@@ -19,7 +19,7 @@ export default function LoginPage() {
     };
 
     console.log(formData);
-    
+
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28,8 +28,10 @@ export default function LoginPage() {
         try {
             const response = await axiosInstance.post('login/', { email, password }); // The login endpoint
             if (response.data) {
+
                 login(); // Call login function from AuthContext
-                navigate("/dashboard"); // Redirect to dashboard after login
+                localStorage.setItem('user_id', response.data.user_id),// Save the token in local storage
+                    navigate("/dashboard"); // Redirect to dashboard after login
             }
         } catch (error) {
             triggerToast("Invalid credentials!", "error");
@@ -108,7 +110,7 @@ export default function LoginPage() {
                                     </div>
                                     <a href="">Forgot Password</a>
                                 </div>
-                                <button type="submit"   disabled={!formData.email || !formData.password} className="btn btn-primary py-3 w-100 mb-4">
+                                <button type="submit" disabled={!formData.email || !formData.password} className="btn btn-primary py-3 w-100 mb-4">
                                     Sign In
                                 </button>
                             </form>
