@@ -2,8 +2,21 @@ import React, { useState, useRef } from "react";
 import { generatePDF } from "../component/generatePdf";
 import ResumePreviewer from "../component/ResumePreviewer";
 import ResumeForm from "../component/ResumeForm";
+import axiosInstance from "../axiosInstance";
+import API_URL from "../apiConfig";
 
-export default function ResumeBuilder(){
+export default function ResumeBuilder() {
+    const handleSubmit = async (e) => {
+        try {
+            formData["user_id"] = localStorage.getItem("user_id");
+            const response = await axiosInstance.post(API_URL + 'resume-submit/', formData);
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
     const resumeRef = useRef(null);
     const [formData, setFormData] = useState({
         fullName: "John Doe",
@@ -38,6 +51,14 @@ export default function ResumeBuilder(){
                 <div className="col-12 text-center">
                     <button onClick={() => { generatePDF(formData) }} className="btn btn-primary btn-lg w-100">
                         Download Resume as PDF
+                    </button>
+                </div>
+            </div>
+
+            <div className="row mt-4">
+                <div className="col-12 text-center">
+                    <button onClick={handleSubmit} className="btn btn-primary btn-lg w-100">
+                        Submit
                     </button>
                 </div>
             </div>
