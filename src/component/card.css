@@ -1,0 +1,13 @@
+.testimonial-item {
+    background: #191c24;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .testimonial-item h5 {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .testimonial-item p {
+    color: #ffffff;
+  }
+  
