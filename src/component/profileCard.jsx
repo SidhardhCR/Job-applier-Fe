@@ -1,6 +1,6 @@
 import React from 'react'
 import "./card.css"
-export default function profileCard() {
+export default function profileCard({count,applyjobs}) {
   return (
     <div className="container-fluid pt-4 px-4">
       <div className="row g-4">
@@ -23,7 +23,17 @@ export default function profileCard() {
             </div>
           </div>
         </div>
+        <div className="col-sm-6 col-xl-4">
+          <div className="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+            <i className="fa fa-chart-line fa-3x text-primary" />
+            <div className="ms-3">
+              <h6 className="mb-0">{count?count : 0}</h6>
+              <p className="mb-2">Matched Jobs With Your Skills</p>
+            </div>
+          </div>
+        </div>
       </div>
+
     </div>
   )
 }

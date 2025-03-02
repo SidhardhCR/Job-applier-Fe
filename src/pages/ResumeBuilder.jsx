@@ -4,18 +4,43 @@ import ResumePreviewer from "../component/ResumePreviewer";
 import ResumeForm from "../component/ResumeForm";
 import axiosInstance from "../axiosInstance";
 import API_URL from "../apiConfig";
+import { useNavigate } from "react-router-dom";
+import { handleScarpper } from "../helper";
 
 export default function ResumeBuilder() {
+    const navigate = useNavigate();
     const handleSubmit = async (e) => {
-        try {
-            formData["user_id"] = localStorage.getItem("user_id");
-            const response = await axiosInstance.post(API_URL + 'resume-submit/', formData);
-            console.log(response);
-        } catch (error) {
-            console.log(error);
-        }
+        e.preventDefault(); // Prevent default form submission
 
-    }
+        try {
+            const userId = localStorage.getItem("user_id");
+            if (!userId) {
+                console.error("User ID not found in localStorage.");
+                return;
+            }
+            const updatedFormData = { ...formData, user_id: userId };
+            const response = await axiosInstance.post(`${API_URL}resume-submit/`, updatedFormData);
+            // const response = { "status": 200 }
+            if (response?.status === 200) {
+                console.log("Resume submitted successfully!");
+                try {
+                    const userData = { user_id: userId, skills: [formData?.skills] };
+                    console.log("dasdasdasdasd",response?.data?.submit_response?.skillsUpdated);
+                    
+                    if (response?.data?.submit_response?.skillsUpdated) {
+                        handleScarpper(userData)
+                    }
+                } catch (scrapeError) {
+                    console.error("Error hitting scrape-jobs route:", scrapeError);
+                }
+            } else {
+                console.error("Resume submission failed:", response);
+            }
+        } catch (error) {
+            console.error("Error submitting resume:", error);
+        }
+    };
+
 
     const resumeRef = useRef(null);
     const [formData, setFormData] = useState({
@@ -47,13 +72,13 @@ export default function ResumeBuilder() {
                     <ResumePreviewer formData={formData} resumeRef={resumeRef} />
                 </div>
             </div>
-            <div className="row mt-4">
+            {/* <div className="row mt-4">
                 <div className="col-12 text-center">
                     <button onClick={() => { generatePDF(formData) }} className="btn btn-primary btn-lg w-100">
                         Download Resume as PDF
                     </button>
                 </div>
-            </div>
+            </div> */}
 
             <div className="row mt-4">
                 <div className="col-12 text-center">

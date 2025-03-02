@@ -28,9 +28,10 @@ export default function LoginPage() {
         try {
             const response = await axiosInstance.post('login/', { email, password }); // The login endpoint
             if (response.data) {
-
+                console.log("res",response.data);
+                
                 login(); // Call login function from AuthContext
-                localStorage.setItem('user_id', response.data.user_id),// Save the token in local storage
+                localStorage.setItem('user_id', response?.data.user_id),// Save the token in local storage
                     navigate("/dashboard"); // Redirect to dashboard after login
             }
         } catch (error) {
