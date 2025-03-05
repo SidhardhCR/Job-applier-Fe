@@ -9,7 +9,7 @@
 //     delete updatedObject._id;
 //     delete updatedObject.user_id;
 //     delete updatedObject.job_id;
-   
+
 
 //     const doc = new jsPDF();
 
@@ -91,7 +91,7 @@
 // };
 import { jsPDF } from "jspdf";
 
-export const generatePDF = async (formData) => {
+export const generatePDF = async (formData, onResponse) => {
     const updatedObject = {
         ...formData,
         "hobbies": "Watching Movies, Playing Football, Listening to Music",
@@ -180,18 +180,22 @@ export const generatePDF = async (formData) => {
 
     // Prepare FormData
     const formDataToSend = new FormData();
-    
+
     formDataToSend.append("file", pdfBlob, "resume.pdf");
 
     // Send PDF to FastAPI backend
     try {
-        const response = await fetch("http://localhost:8000/upload", {
+
+        const response = await fetch("http://127.0.0.1:8000/upload", {
             method: "POST",
             body: formDataToSend,
         });
 
         if (response.ok) {
             console.log("PDF saved successfully!");
+            const responseData = await response.json(); // If API returns data
+            onResponse(responseData); // Pass the response data to the callback function
+
         } else {
             console.error("Failed to save PDF.");
         }
